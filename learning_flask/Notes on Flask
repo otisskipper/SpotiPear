@@ -1,0 +1,15 @@
+Notes on Flask
+
+
+Tutorial: https://www.youtube.com/watch?v=lj4I_CvBnt0
+
+To activate Venv:
+$ source venv/bin/activate
+
+deactivate to leave
+
+
+
+Site:
+ https://spotipearv1.appspot.com/
+ 

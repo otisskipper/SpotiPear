@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>About Flask</title>
+  </head>
+  <body>
+    {% extends "template.html" %}
+    {% block content %}
+    <h1> About Flask </h1>
+    <p> Flask is cool.</p>
+    <form action = "http://127.0.0.1:5000/getname" method = "GET">
+        <p>Enter Name:</p>
+        <p><input type = "text" name = "nm" /></p>
+        <p><input type = "submit" value = "submit"/></p>
+      </form>
+    {% endblock %}
+  </body>
+</html>
