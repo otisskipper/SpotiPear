@@ -2,8 +2,8 @@ import config
 from flask import Flask, render_template, request, redirect, url_for, make_response
 
 
-import spotipy
-import spotipy.util as util
+#import spotipy
+#import spotipy.util as util
 import pandas as pd 
 import numpy as np
 import copy

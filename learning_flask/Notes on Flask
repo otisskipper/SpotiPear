@@ -19,4 +19,6 @@ Super useful site that makes playlist from past 30 days. Good base for flask imp
 
  github
  
- 
+ Useful article for deploying to google cloud
+
+ https://medium.freecodecamp.org/how-to-build-a-web-application-using-flask-and-deploy-it-to-the-cloud-3551c985e492
