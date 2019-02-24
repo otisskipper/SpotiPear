@@ -1,3 +1,6 @@
+# HUGE shoutout to Simon Quick who's Spotify project was immensely helpful in using Flask to interact with the Spotify API
+# Some of these functions are taken line for line from his project - if it had been a library I would just used import SimonsLibrary
+import time
 import requests
 from flask import request
 import json
@@ -27,12 +30,9 @@ def get_access_token(code, authorization):
 
 def create_playlist(access_token, user_id, title):
     cp_headers = {'Authorization': access_token, 'Content-Type': 'application/x-www-form-urlencoded'}
-    print('making cp_post')
     cp_post = {'name': title, 'public': 'true', 'collaborative': 'false',
                'description': 'testing this out'}
-    print('making cp_url')
     cp_url = 'https://api.spotify.com/v1/users/' + user_id.decode("utf-8") + '/playlists'
-    print('making r_cp')
     r_cp = requests.post(cp_url, headers=cp_headers, data=json.dumps(cp_post))
 
     print (r_cp.status_code)
@@ -45,4 +45,20 @@ def create_playlist(access_token, user_id, title):
     playlist_id = r_cp_json['id']
     owner_id = r_cp_json['owner']['id']
     #full_pl = base64.b64encode(owner_id + '/' + playlist_id)
-    #return owner_id, full_pl, playlist_id
+    # for delay testing purposes
+    time.sleep(5)
+    return owner_id, playlist_id #full_pl
+
+def get_all_playlists(access_token, user_id):
+        api_headers = {'Authorization': access_token}
+        api_url = 'https://api.spotify.com/v1/me/playlists'
+        api_get_response = requests.get(api_url, headers = api_headers)
+        all_playlists_json = api_get_response.json()
+        return all_playlists_json
+
+# Given sructured JSON of all playlists returned from spotify API, get an array of the names
+def get_all_playlist_names(all_playlists_json):
+    all_playlist_names = []
+    for playlist in all_playlists_json['items']:
+        all_playlist_names.append(playlist['name'])
+    return all_playlist_names

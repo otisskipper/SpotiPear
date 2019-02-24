@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>My First Web Page</h2>
+<p>My First Paragraph.</p>
+
+<select id="countries"></select>
+
+
+<script>
+var countries = ['France', 'UK', 'Spain','Belgium','Holland'],
+select = document.getElementById('countries');
+var labels = {{labels|safe}}
+for( label in labels ) {
+    
+    select.add( new Option( labels[label] ) );
+    
+};
+</script>
+
+</body>
+</html> 

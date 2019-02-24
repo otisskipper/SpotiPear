@@ -9,7 +9,7 @@ import spotipy
 #import spotipy.util as util
 import numpy
 import pandas as pd 
-from functions import get_access_token, create_playlist
+from functions import get_access_token, create_playlist, get_all_playlists, get_all_playlist_names
 
 #import numpy as np
 #import copy
@@ -27,6 +27,7 @@ app.config.from_object('config')
 @app.route("/")
 def home():
     return render_template("home.html")
+
 
 
 @app.route("/about")
@@ -48,28 +49,22 @@ def logged_in():
     access_token = get_access_token(code, app.config['AUTHORIZATION'])
     
     
-    
-    print('Good So Far')
-    print( 'Getting the users details')
     me_headers = {'Authorization': access_token}
     me_post = {}
     me_url = 'https://api.spotify.com/v1/me'
 
     r_me = requests.get('https://api.spotify.com/v1/me', headers=me_headers)
     r_me_json = json.loads(r_me.text)
-
-    user_id = r_me_json['id'].encode('utf-8')
-    email = r_me_json['email'].encode('utf-8')
-    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    user_id_byte = r_me_json['id'].encode('utf-8')
+    user_id_str = r_me_json['id']
     
-    scope = 'user-library-read'
-    title = 'SpotiPear WebApp Playlist'
-    tmp = create_playlist(access_token, user_id, title)
+    
+    all_playlists_json = get_all_playlists(access_token, user_id_byte)
+    all_playlists_names = get_all_playlist_names(all_playlists_json)
 
-    return access_token
-    # Bearer BQAewdNIJrMqe2YwYlPZj-MfSZUf_52dnXQGUK8ku5W9RVfXIxG7ppbnabfu5jXEO3mbj20EhfpUexzlLfDdNx_y0tI4YzwzRjD4yLuoqDaZh3sS5nlVsacfKGriPuviwJhk-htuJIljh88RNhk6-P9k_jFNLyv9c48amwetjxm4ELOdFP5UUcLRzB8C2F3FCnDktUsKL-Qbp0vybu61OhKN4649vRmcWvHMZeV__WuirNtNTu0VM3AoWog24JmB-HPfRw
-    #return render_template("logged_in.html")
-
+    # Pass access_token and user_id to be set as cookies on next page
+    return render_template('playlist_select.html', all_playlists_names = all_playlists_names, access_token = access_token, user_id = user_id_str)
+    
 
 @app.route("/button")
 def button():
@@ -86,6 +81,19 @@ def login():
     # response.set_cookie('time_range', request.args.get('time_range'))
     response = make_response(redirect(base_url, 302))
     return response
+
+@app.route('/pearing', methods = ['GET', 'POST'])
+def pearing():
+    #if request.method == 'POST':
+    playlist_name_1 = request.form['playlist_name_1']
+    playlist_name_2 = request.form['playlist_name_2']
+    user_id = request.form['user_id']
+    access_token = request.form['access_token']
+    
+    # Turn this into just pearing the 2 playlists
+    # Can I display a message while the playlists pear - otherwise page may take a while to load
+    create_playlist(access_token, user_id.encode("utf-8"), 'pearing playlist')
+    return render_template('pearing.html', playlist_name_1 = playlist_name_1, playlist_name_2 = playlist_name_2, user_id = user_id, access_token = access_token)
 
 
 if __name__ == "__main__":
