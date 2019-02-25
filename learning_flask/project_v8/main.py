@@ -1,6 +1,6 @@
 #import config 
 from flask import Flask, render_template, request, redirect, url_for, make_response
-
+import time
 import requests
 import json
 import datetime
@@ -92,9 +92,27 @@ def pearing():
     
     # Turn this into just pearing the 2 playlists
     # Can I display a message while the playlists pear - otherwise page may take a while to load
-    create_playlist(access_token, user_id.encode("utf-8"), 'pearing playlist')
+    
     return render_template('pearing.html', playlist_name_1 = playlist_name_1, playlist_name_2 = playlist_name_2, user_id = user_id, access_token = access_token)
 
+@app.route('/test_loading', methods = ['GET', 'POST'])
+def test_loading():
+    return render_template('test_loading.html')
+
+@app.route('/test_loading_redirect', methods = ['POST'])
+def test_loading_redirect():
+    time.sleep(5)
+    return render_template('test_loading_redirect.html')
+
+
+@app.route('/test_loading_redirect2')
+def test_loading_redirect2():
+    return render_template('test_loading_redirect2.html')
+
+
+@app.route('/test_jquery')
+def test_jquery():
+    return render_template('test_jquery.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

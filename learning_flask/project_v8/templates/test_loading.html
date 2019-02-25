@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>// <![CDATA[
+        function loading(){
+            $("#loading").show();
+            $("#content").hide();       
+        }
+// ]]></script>
+
+
+<body>
+    <div id="loading"></div>
+    <div id="content">
+        <h3>Type anything:</h3>
+        <p>
+        <form action = "{{ url_for('test_loading_redirect') }}" method="POST">
+           
+            <input type="submit" name="anything_submit" value="Submit" onclick="loading();">
+            
+        </form>
+        </p>
+    </div>    
+</body>
+
+
+<style>
+div#loading {
+    width: 1000px;
+    height: 1000px;
+    display: none;
+    background: url(/static/images/loading.png) no-repeat;
+    cursor: wait;
+    }
+</style>
+
+</html>

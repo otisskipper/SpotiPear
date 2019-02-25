@@ -46,7 +46,6 @@ def create_playlist(access_token, user_id, title):
     owner_id = r_cp_json['owner']['id']
     #full_pl = base64.b64encode(owner_id + '/' + playlist_id)
     # for delay testing purposes
-    time.sleep(5)
     return owner_id, playlist_id #full_pl
 
 def get_all_playlists(access_token, user_id):
@@ -62,3 +61,4 @@ def get_all_playlist_names(all_playlists_json):
     for playlist in all_playlists_json['items']:
         all_playlist_names.append(playlist['name'])
     return all_playlist_names
+
