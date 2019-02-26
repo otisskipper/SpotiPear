@@ -74,6 +74,7 @@ def button():
 def login():
     callback_url = request.url_root + 'logged_in'
     base_url = 'https://accounts.spotify.com/en/authorize?client_id=' + app.config['CLIENT_ID'] + '&response_type=code&redirect_uri=' + callback_url + '&scope=user-read-email%20playlist-read-private%20user-follow-read%20user-library-read%20user-top-read%20playlist-modify-private%20playlist-modify-public&state=34fFs29kd09'
+    
     # this is how we set the Cookie when its a Redirect instead of return_response
     # https://stackoverflow.com/questions/12272418/in-flask-set-a-cookie-and-then-re-direct-user
     # response = make_response(redirect(base_url, 302))
