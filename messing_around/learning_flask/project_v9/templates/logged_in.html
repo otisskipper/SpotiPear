@@ -12,8 +12,8 @@
 
 <body>
 
-<h2>Pear Playlists</h2>
-<p>Select the two playlists you want to combine</p>
+<h2>Combine Playlists</h2>
+<p>Select the two playlists you want to combine - if you want to combine yours and a friend's you'll have to follow their playlist from your account</p>
 
 
 
@@ -22,9 +22,9 @@
 
 
 <body>
-    <div id="loading"> Pearing Playlists - This Could Take a While </div>
+    <div id="loading"> Combining Playlists... </div>
     <div id="content">
-        <h3>Type anything:</h3>
+        <h3>Select the 2 playlists you want to combine</h3>
         <p>
         <form action ="{{ url_for('pearing') }}" method="POST">
             <select id="playlist_dropdown_1" name = "playlist_name_1"></select>
@@ -33,8 +33,8 @@
             <input type="hidden" name="user_id" id = "user_id"></input>
             <input type="hidden" name="access_token" id = "access_token"></input>
             
-        <button type="submit" onclick="loading();" >Submit</button>
-		</form>
+        <button type="submit" onclick="loading();" >Combine Playlists</button>
+    </form>
         </p>
     </div>    
 </body>

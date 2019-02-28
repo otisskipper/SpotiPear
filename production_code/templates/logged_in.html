@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+<body>
+{% extends "template.html" %}
+{% block content %}
+    
+
+
+<h2>Combine Playlists</h2>
+<p>Select the two playlists you want to combine - if you want to combine yours and a friend's you'll have to follow their playlist from your account</p>
+
+
+
+<!-- Wrap this in a JQUERY script that shows a loading message while Pearing playlist -->
+<!-- https://stackoverflow.com/questions/14525029/display-a-loading-message-while-a-time-consuming-function-is-executed-in-flask -->
+
+
+<body>
+    <div id="loading"> Combining Playlists... </div>
+    <div id="content">
+        <p>
+        <form action ="{{ url_for('pearing') }}" method="POST">
+            <select id="playlist_dropdown_1" name = "playlist_name_1" class = "custom-select"></select>
+            <select id="playlist_dropdown_2" name = "playlist_name_2" class = "custom-select"></select>
+            <!-- include user_id and access_token in post request so Python can leverage for functions -->
+            <input type="hidden" name="user_id" id = "user_id"></input>
+            <input type="hidden" name="access_token" id = "access_token"></input>
+            
+        <button type="submit" onclick="loading();" class = "button" >Combine Playlists</button>
+    </form>
+        </p>
+    </div>    
+
+</body>
+
+
+<!-- Form that has users select the 2 playlists they want to combine -->
+ 
+ <script>// <![CDATA[
+        function loading(){
+            $("#loading").show();
+            $("#content").hide();       
+        }
+// ]]></script>
+
+
+
+<script>
+
+// Dynamically populatae form elements with all possible playlist names
+var select_1 = document.getElementById('playlist_dropdown_1');
+var select_2 = document.getElementById('playlist_dropdown_2');
+//Read in all playlists from flask as array - if single variable, use quotes. If list, no quotes
+var all_playlists_names = {{all_playlists_names|safe}};
+
+for( playlist_name in all_playlists_names ) {
+    
+    select_1.add( new Option( all_playlists_names[playlist_name] ) );
+    select_2.add( new Option( all_playlists_names[playlist_name] ) );
+    
+};
+
+
+var user_id = '{{user_id}}';
+var access_token = '{{access_token}}';
+
+document.getElementById('user_id').value = user_id;
+document.getElementById('access_token').value = access_token;
+
+function clicked(){
+
+}
+
+</script>
+
+<style>
+div#loading {
+    width: 1000px;
+    height: 1000px;
+    display: none;
+    /*background: url(/static/images/loading.png) no-repeat;*/
+    cursor: wait;
+    }
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* The container must be positioned relative: */
+.custom-select {
+  position: relative;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+  background-color: DodgerBlue;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+</style>
+
+{% endblock %}
+</body>
+</html> 

@@ -10,7 +10,7 @@ import spotipy
 import numpy
 import pandas as pd 
 from functions import get_access_token, create_playlist, get_all_playlists, get_all_playlist_names
-
+from python_pearing.pearing_class_functions import Pear_Playlists
 #import numpy as np
 #import copy
 #from sklearn.decomposition import PCA
@@ -30,18 +30,6 @@ def home():
 
 
 
-@app.route("/about")
-def about():
-
-    Cars = {'Brand': ['Honda Civic','Toyota Corolla','Ford Focus','Audi A4'],
-        'Price': [22000,25000,27000,35000]
-        }
-
-    df = pd.DataFrame(Cars, columns= ['Brand', 'Price'])
-
-    my_str = df.to_string()
-    return my_str
-    #return render_template("about.html")
 
 @app.route("/logged_in")
 def logged_in():
@@ -63,12 +51,8 @@ def logged_in():
     all_playlists_names = get_all_playlist_names(all_playlists_json)
 
     # Pass access_token and user_id to be set as cookies on next page
-    return render_template('playlist_select.html', all_playlists_names = all_playlists_names, access_token = access_token, user_id = user_id_str)
+    return render_template('logged_in.html', all_playlists_names = all_playlists_names, access_token = access_token, user_id = user_id_str)
     
-
-@app.route("/button")
-def button():
-    return render_template("button.html")
 
 @app.route("/login")
 def login():
@@ -93,7 +77,8 @@ def pearing():
     
     # Turn this into just pearing the 2 playlists
     # Can I display a message while the playlists pear - otherwise page may take a while to load
-    time.sleep(4)
+    Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id)
+    
     return render_template('pearing.html', playlist_name_1 = playlist_name_1, playlist_name_2 = playlist_name_2, user_id = user_id, access_token = access_token)
 
 
