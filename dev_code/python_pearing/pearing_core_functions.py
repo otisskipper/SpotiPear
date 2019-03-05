@@ -1,80 +1,69 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
 
 import spotipy
-import spotipy.util as util
+
 import pandas as pd 
 import numpy as np
 import copy
-#from sklearn.decomposition import PCA
+
 import sklearn
 from sklearn.preprocessing import StandardScaler
-#import matplotlib.pyplot as plt
-
-#from matplotlib import pyplot
-#from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import distance_matrix
 import requests
 import json
 import math
-# In[2]:
+
 
 
 # Given a username and a playlist_dict, generate a dataframe of 'similar' songs
 #PFI: This function could be way more robust, looking at a artists/genres as well as randomizing/subsampling to improve speed
 
-# TODO: Get Recommendations off of Recommendations (probably only want to do recursively once)
+# PFI: Get Recommendations off of Recommendations (probably only want to do recursively once)
 def get_similar_tracks_from_playlist(username_var, playlist_var, spotipy_connection):
+    # Use spotipy library to get the user's playlist and then parse JSON and get track ids
     top_level_tracks = spotipy_connection.user_playlist(username_var, playlist_var['id'],
                     fields="tracks,next")
     second_level_tracks = top_level_tracks['tracks']
+
+
     playlist_var_track_ids = [None]*len(second_level_tracks['items'])
-    playlist_var_artist_ids = [None]*len(second_level_tracks['items'])
-    # playlist_1_genre_ids = [None]*len(second_level_tracks['items'])
+    
     for i, item in enumerate(second_level_tracks['items']):
         cur_track = item['track']
         playlist_var_track_ids[i] = cur_track['id']
-#        playlist_var_artist_ids[i] = cur_track['artists'][0]['id']
 
-
-## Sometimes we get a track with a "none" value, get rid of these (this could reset indexing, don't rely on indices)
+    ## Sometimes we get a track with a "none" value, get rid of these (this could reset indexing, don't rely on indices)
     playlist_var_track_ids = [x for x in playlist_var_track_ids if x != None]
 
+    # Pull recommendations and build list of more recommendations
+    # Must be a list of 5 SpotifyIDs 
+    # PFI: Currently I'm passing track_id, but could pass artist, playlist, etc...
     rec_tracks_list = [None]*int((len(playlist_var_track_ids)/5)-1)
     for i in range(0,len(rec_tracks_list)):
         rec_tracks_list[i] = spotipy_connection.recommendations(seed_tracks = playlist_var_track_ids[i*5:(i+1)*5])
         
     # rec_tracks_list is a list of lists, each sublist has a track
     # extract out to a single list
+    # be default each recommendation call to API sends back 20 recs
     rec_tracks_list_full = [None]*20*len(rec_tracks_list)
 
-    # Iterate over all sets of recommendations from groups of 5 songs
+    # Iterate over all sets of recommendations from groups of 5 SpotifyIDs
     for i, rec_set in enumerate(rec_tracks_list):
 
         # Iterate over every track
         for j, tracks in enumerate(rec_set['tracks']):
             rec_tracks_list_full[i*20 + j] = tracks['id']
-            #print(tracks['artists'][0]['name'], ': ', tracks['name'], sep = '')
+            
 
     all_track_ids = pd.DataFrame(np.array(rec_tracks_list_full))
     all_track_ids.columns=['track_id']
     return all_track_ids
 
 
-# In[ ]:
 
 
-
-
-
-# In[2]:
-
-
-
+# Get the features for every song in a dataframe
 def get_track_features(track_df, access_token, user_id):
+
     cols_to_keep = list(['track_id','danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo'])
     
     # Can only get up to 100 songs at a time from API
@@ -95,10 +84,8 @@ def get_track_features(track_df, access_token, user_id):
     return track_features_df
 
 
-# In[5]:
 
-
-# Given a playlist (and the username of its owner) return a dataframe of the track IDs
+# Given a playlist (in json format) (and the username of its owner) return a dataframe of the track IDs
 
 def get_tracks_from_playlist(username, playlist, spotipy_connection):
     
@@ -113,7 +100,7 @@ def get_tracks_from_playlist(username, playlist, spotipy_connection):
     
     #PFI: could do something similar for artist/genre and Pear on those as well
     #playlist_var_artist_ids = [None]*len(second_level_tracks['items'])
-    # playlist_1_genre_ids = [None]*len(second_level_tracks['items'])
+    #playlist_1_genre_ids = [None]*len(second_level_tracks['items'])
     
     for i, item in enumerate(second_level_tracks['items']):
         cur_track = item['track']
@@ -129,13 +116,7 @@ def get_tracks_from_playlist(username, playlist, spotipy_connection):
     return to_return
 
 
-# In[ ]:
 
-
-
-
-
-# In[4]:
 
 
 # Given a set of chosen playlist names, and the returned API call of all the user's playlists (dict of each playlist)
@@ -153,51 +134,13 @@ def get_api_playlists_from_names(chosen_playlist_names, all_api_playlists):
     return chosen_api_playlists 
 
 
-# In[2]:
-
-
-# PCA
-# Given List of N dfs with tracks as rows and audio features as columns
-# Union all, do PCA (so that they're all on the same scale) then separate out into list of DFs
-
-# def pca_merge(feature_dfs):
-#     all_features_tmp = pd.DataFrame(columns = feature_dfs[0].columns)
-#     all_features_tmp['playlist_iter'] = None
-#     feature_dfs_copy = copy.deepcopy(feature_dfs)
-#     for i, playlist_features in enumerate(feature_dfs_copy):
-#         playlist_features['playlist_iter'] = i
-#         all_features_tmp = all_features_tmp.append(playlist_features)
-
-
-
-#     # Mode and Key make PCA look weird (at least for graphing) - take them out for time being
-#     # PFI: Take a look at this again, maybe they're useful, but just not in visualization
-#     all_features = all_features_tmp.drop(['mode', 'key'], axis = 1).reset_index()
-
-#     # Actual PCA
-#     x = all_features.drop(['playlist_iter', 'track_id'], axis = 1)
-#     # Standardizing the features
-#     x = StandardScaler().fit_transform(x)
-
-#     #TODO: Adjust to dynamically create table so that we can have n principal components
-#     pca = PCA(n_components=3)
-#     principalComponents = pca.fit_transform(x)
-#     principalDf = pd.DataFrame(data = principalComponents
-#                  , columns = ['principal component 1', 'principal component 2', 'principal component 3'])
-#     playlists_finalDf = pd.concat([principalDf,  all_features[['playlist_iter']]], axis = 1)
-
-#     return playlists_finalDf
-
-
-# In[3]:
-
 
 #Given set of Playlist_bases objects, get a distance matrix of all tracks to all other tracks (will be redundancies)
-# Assumes the rec_tracks_df of all base playlists is the same
+# Assumes the rec_tracks_df of all base playlists has the same columns
 def get_track_distances(playlist_bases):
 
     # Need a df with all tracks as rows
-    # All features as columns
+    # And All features as columns
     
     # Create empty data frame to union results onto
     all_rec_tracks_tmp = pd.DataFrame(columns = playlist_bases[0].rec_tracks_df.columns)
@@ -209,27 +152,26 @@ def get_track_distances(playlist_bases):
         orig_playlist_tracks_df = playlist_base.orig_playlist_tracks_df
         all_orig_tracks_tmp = all_orig_tracks_tmp.append(orig_playlist_tracks_df)
         
-    # Mode & Key did bad stuff in early analysis
+    # Mode & Key did bad stuff in early analysis so remove them
     all_rec_tracks = all_rec_tracks_tmp.reset_index().drop(['index','mode', 'key'], axis = 1)
     all_orig_tracks = all_orig_tracks_tmp.reset_index().drop(['index','mode', 'key'], axis = 1)
     
-    # Now get all original tracks, compare distance 
-
-
+    
+    # We combined all dataframes into 1 so that we could scale them
+    # We can't individually scale the dataframes separately (avg of df1 is 3, avg of df2 is 4 but those both individually scale to 0)
+    # So need to scale all songs together
     all_tracks = all_rec_tracks.append(all_orig_tracks).reset_index().drop(['index'], axis = 1)
     
     all_tracks_scaled = pd.DataFrame(StandardScaler().fit_transform(all_tracks.drop(['track_id'], axis = 1)))
-
     
+    # Now get all original tracks, compare distance 
     all_rec_tracks_scaled = all_tracks_scaled.iloc[0:len(all_rec_tracks)]
     all_rec_tracks_scaled['track_id'] = all_rec_tracks['track_id']
     all_orig_tracks_scaled = all_tracks_scaled.iloc[len(all_rec_tracks):all_tracks_scaled.shape[0]].reset_index().drop(['index'], axis = 1)
     all_orig_tracks_scaled['track_id'] = all_orig_tracks['track_id']
     
     all_tracks_scaled['track_id'] = all_tracks['track_id']
-    ### Normalize that shit before doing the distance matrix, have to put in same df to normalize
-    ### 
-#    dist_matrix = pd.DataFrame(distance_matrix(all_rec_tracks.drop(['track_id'], axis = 1).values, all_orig_tracks.drop(['track_id'], axis = 1).values))
+    
     dist_matrix = pd.DataFrame(distance_matrix(all_rec_tracks_scaled.drop(['track_id'], axis = 1).values, all_orig_tracks_scaled.drop(['track_id'], axis = 1).values))
     
     # Now have a distance matrix whose rows are all of our recommended tracks
@@ -242,8 +184,8 @@ def get_track_distances(playlist_bases):
     return dist_matrix
 
 
-# In[6]:
 
+# Leverage spotipy here instead, could be more concise
 
 def create_playlist(access_token, user_id, title):
     cp_headers = {'Authorization': access_token, 'Content-Type': 'application/x-www-form-urlencoded'}
@@ -261,8 +203,7 @@ def create_playlist(access_token, user_id, title):
     r_cp_json = r_cp.json()
     playlist_id = r_cp_json['id']
     owner_id = r_cp_json['owner']['id']
-    #full_pl = base64.b64encode(owner_id + '/' + playlist_id)
-    # for delay testing purposes
+ 
     return  playlist_id #full_pl
 
 

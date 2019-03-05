@@ -1,4 +1,3 @@
-#import config 
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import time
 import requests
@@ -10,6 +9,7 @@ import numpy
 import pandas as pd 
 from functions import get_access_token, create_playlist, get_all_playlists, get_all_playlist_names
 from python_pearing.pearing_class_functions import Pear_Playlists
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -52,14 +52,13 @@ def login():
 
 @app.route('/pearing', methods = ['GET', 'POST'])
 def pearing():
-    #if request.method == 'POST':
+    
     playlist_name_1 = request.form['playlist_name_1']
     playlist_name_2 = request.form['playlist_name_2']
     user_id = request.form['user_id']
     access_token = request.form['access_token']
     
-    # Turn this into just pearing the 2 playlists
-    # Can I display a message while the playlists pear - otherwise page may take a while to load
+    
     Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id)
     
     return render_template('pearing.html', playlist_name_1 = playlist_name_1, playlist_name_2 = playlist_name_2, user_id = user_id, access_token = access_token)

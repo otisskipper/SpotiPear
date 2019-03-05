@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Flask Parent Template</title>
-    <link rel="stylesheet" href="{{ url_for('static',    filename='css/template.css') }}">
+<head>
+  <meta charset="utf-8">
+  <title>Flask Parent Template</title>
+  <link rel="stylesheet" href="{{ url_for('static',    filename='css/template.css') }}">
 </head>
-  <body id= "grad1">
-    <header>
-      <div class="container">
-        <h1 class="title">SpotiPear (working title)</h1>
-        <strong><nav>
-          <ul class="menu">
-            <!-- <li><a href="{{ url_for('home') }}">Home</a></li> -->
-            
-          </ul>
-        </nav></strong>
-      </div>
-    </header>
-{% block content %}
-{% endblock %}
- </body>
- <style>
- body{
+<body id= "grad1">
+  <header>
+    <div class="container">
+      <h1 class="title">SpotiPear (working title)</h1>
+      <strong><nav>
+        <ul class="menu">
+          <!-- <li><a href="{{ url_for('home') }}">Home</a></li> -->
+          
+        </ul>
+      </nav></strong>
+    </div>
+  </header>
+  {% block content %}
+  {% endblock %}
+</body>
+<style>
+body{
   text-align: center;
- }
+}
 
- html {
+html {
   height: 100%;
   background-image: linear-gradient(-20deg, #560067, #F3CBFA); /* Standard syntax (must be last) */
   background-size: cover;
@@ -33,17 +33,17 @@
   font-family: "Comic Sans MS", cursive, sans-serif;
 }
 .button {
-      background-color: #000000; /* Green */
-      border: none;
-      color: white;
-      padding: 1% 2%;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 12px;
-      font-family: "Comic Sans MS", cursive, sans-serif;
-      border-radius: 5px;
-    }
+  background-color: #000000; 
+  border: none;
+  color: white;
+  padding: 1% 2%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  border-radius: 5px;
+}
 </style>
- </style>
+</style>
 </html>
