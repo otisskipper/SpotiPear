@@ -19,13 +19,14 @@
 
 
 <body>
-    <div class="w3-center">
-      <h2>Choose Playlists</h2>
-      <p>Select the two playlists you want to combine</p>
-      <p> If you want to combine yours and a friend's you'll have to follow their playlist from your account</p>
-    <div id="loading"> Combining Playlists... </div>
+    <div class="w3-display-middle w3-center">
+      <div>
+        <h2>Choose Playlists</h2>
+        <p> If you want to combine yours and a friend's you'll have to follow their playlist from your account</p>
+      </div>
+    <div id="loading" class = "w3-center" > Combining Playlists... </div>  
     <div id="content">
-        <p>
+        
         <form action ="{{ url_for('pearing') }}" method="POST">
           
             <select id="playlist_dropdown_1" name = "playlist_name_1" class = "custom-select"></select>
@@ -37,9 +38,10 @@
         
         
         <button type="submit" onclick="loading();" class = "w3-btn w3-round-xxlarge w3-ripple combine-playlists" >Combine Playlists</button>
-      
+        
     </form>
-        </p>
+
+        
     </div>    
 </div>
 </body>
@@ -83,8 +85,8 @@ document.getElementById('access_token').value = access_token;
 
 <style>
 div#loading {
-    width: 1000px;
-    height: 1000px;
+    width: 100%;
+    height: 100%;
     display: none;
     /*background: url(/static/images/loading.png) no-repeat;*/
     cursor: wait;

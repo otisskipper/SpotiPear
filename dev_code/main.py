@@ -62,9 +62,9 @@ def pearing():
     user_id = request.form['user_id']
     access_token = request.form['access_token']
     
-    
-    Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id)
-    
+    import time
+    #Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id)
+    time.sleep(5)
     return render_template('pearing.html', playlist_name_1 = playlist_name_1, playlist_name_2 = playlist_name_2, user_id = user_id, access_token = access_token)
 
 
