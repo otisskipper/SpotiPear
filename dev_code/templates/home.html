@@ -1,31 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8">
-  <title>Spotipear</title>
-</head>
-<body>
-  {% extends "template.html" %}
+<html>
+{% extends "template.html" %}
   {% block content %}
-  <h2> Combine 2 Spotify Playlists </h2>
-  <p> Here's a Web App that takes the sound qualities of 2 spofity playlists to create a new playlist that is most-similar to both playlists. I got the idea to build this when my roommate and his girlfriend couldn't decide what to watch on Netflix and thought it'd be cool to build something that recommended a movie they'd both like. But Netflix doesn't have a public API, and Spotify does. So here's that same idea but for Spotify.   </p>
-
-
-  <form action="/login" method = "get" >
-
-    <button type="submit", id = "submit" class = "button" >Log Into Spotify</button>
+  <div>
     
-
-  </form>
-
-  <style>
-  p{
-    margin-left: 15%;
-    margin-right: 15%;
-  }
-  </style>
-
-  {% endblock %}
-</body>
-
+      <div class="w3-display-middle w3-center">
+        <div class = "w3-display-container">
+          <h1 class = "w3-animate-top"><a href= "/login"> Give It A Try</a></h1>
+          <div class="w3-display-bottom w3-display-hover">Log Into Spotify to Start Creating New Playlists</div>
+        </div>
+        <hr class="w3-border-grey" style="margin:auto;width:100%">
+        <div class = "w3-display-container">
+          <h1 class = "w3-animate-bottom" >About</h1>
+          
+          <div class="w3-display-bottom w3-display-hover">Going on a roadtrip with a friend and you each have a playlist you want to listen to? Got two favorite playlists and want to find bands with similar qualities to each? Wanna stop arguing with your significant other about what to play in the car? SpotiPear will take two Spotify playlists and find a new set of songs that combine the musical features and sound qualities of each of the original playlists</div>
+        </div>
+      </div>
+    
+  </div>
+{% endblock %}
 </html>

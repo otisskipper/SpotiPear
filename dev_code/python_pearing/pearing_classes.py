@@ -61,7 +61,7 @@ class Playlist_Base():
         ### CREATE RECS FROM PLAYLIST -- PFI: could make this function much more robust, look at artist/genre too
         
         # Get recommended tracks as dict
-        rec_tracks_tmp = get_similar_tracks_from_playlist(self.user_id, self.orig_playlist_dict, self.spotipy_connection)
+        rec_tracks_tmp = get_similar_tracks_from_playlist(self.user_id, self.orig_playlist_dict, self.access_token)
         self.rec_tracks_df = get_track_features(rec_tracks_tmp, self.access_token, self.user_id)
         
 

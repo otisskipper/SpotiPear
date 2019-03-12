@@ -12,34 +12,44 @@ import requests
 import json
 import math
 
-
-
 # Given a username and a playlist_dict, generate a dataframe of 'similar' songs
 #PFI: This function could be way more robust, looking at a artists/genres as well as randomizing/subsampling to improve speed
 
 # PFI: Get Recommendations off of Recommendations (probably only want to do recursively once)
-def get_similar_tracks_from_playlist(username_var, playlist_var, spotipy_connection):
-    # Use spotipy library to get the user's playlist and then parse JSON and get track ids
-    top_level_tracks = spotipy_connection.user_playlist(username_var, playlist_var['id'],
-                    fields="tracks,next")
-    second_level_tracks = top_level_tracks['tracks']
+def get_similar_tracks_from_playlist(user_id, playlist_dict, access_token):
+    api_headers = {'Authorization': access_token}
+    api_url = 'https://api.spotify.com/v1/playlists/' + playlist_dict['id'] + '/tracks'
+    api_get_response = requests.get(api_url, headers = api_headers )
+    tracks_json = api_get_response.json()
 
+    track_ids = [None]*len(tracks_json['items'])
+    artist_ids = [None]*len(tracks_json['items'])
+    for i, item in enumerate (tracks_json['items']):
+        track_ids[i] = tracks_json['items'][i]['track']['id']
+        artist_ids[i] = tracks_json['items'][i]['track']['artists'][0]['id']
 
-    playlist_var_track_ids = [None]*len(second_level_tracks['items'])
+    track_ids = [x for x in track_ids if x != None]
+    artist_ids = [x for x in artist_ids if x != None]
     
-    for i, item in enumerate(second_level_tracks['items']):
-        cur_track = item['track']
-        playlist_var_track_ids[i] = cur_track['id']
+    return get_recs_from_track_ids (track_ids, access_token)
 
-    ## Sometimes we get a track with a "none" value, get rid of these (this could reset indexing, don't rely on indices)
-    playlist_var_track_ids = [x for x in playlist_var_track_ids if x != None]
 
-    # Pull recommendations and build list of more recommendations
-    # Must be a list of 5 SpotifyIDs 
-    # PFI: Currently I'm passing track_id, but could pass artist, playlist, etc...
-    rec_tracks_list = [None]*int((len(playlist_var_track_ids)/5)-1)
+def get_recs_from_track_ids (track_ids, access_token):
+    api_headers = {'Authorization': access_token}
+    api_url_base = 'https://api.spotify.com/v1/recommendations?seed_tracks=' 
+    rec_tracks_list = [None]*int((len(track_ids)/5)-1)
+    
+    # Can only get recs from 5 tracks at a time (get 20 back from API)
+    # Store each set of 20 in a list & combine later
     for i in range(0,len(rec_tracks_list)):
-        rec_tracks_list[i] = spotipy_connection.recommendations(seed_tracks = playlist_var_track_ids[i*5:(i+1)*5])
+        api_url = api_url_base + ','.join(track_ids[i*5:(i+1)*5])
+        api_get_response = requests.get(api_url, headers = api_headers )
+        track_recs_json = api_get_response.json()
+        cur_rec_tracks = [None]*20
+        for j in range(0,20):
+            cur_rec_tracks[j] = track_recs_json['tracks'][j]['id']
+        rec_tracks_list[i] = cur_rec_tracks
+#        rec_tracks_list[i] = spotipy_connection.recommendations(seed_tracks = playlist_var_track_ids[i*5:(i+1)*5])
         
     # rec_tracks_list is a list of lists, each sublist has a track
     # extract out to a single list
@@ -48,16 +58,18 @@ def get_similar_tracks_from_playlist(username_var, playlist_var, spotipy_connect
 
     # Iterate over all sets of recommendations from groups of 5 SpotifyIDs
     for i, rec_set in enumerate(rec_tracks_list):
-
         # Iterate over every track
-        for j, tracks in enumerate(rec_set['tracks']):
-            rec_tracks_list_full[i*20 + j] = tracks['id']
+        for j, track_id in enumerate(rec_set):
+  
+            rec_tracks_list_full[i*20 + j] = track_id
             
 
     all_track_ids = pd.DataFrame(np.array(rec_tracks_list_full))
     all_track_ids.columns=['track_id']
-    return all_track_ids
 
+
+    return all_track_ids
+    
 
 
 

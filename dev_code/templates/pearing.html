@@ -3,11 +3,17 @@
 <body>
 	{% extends "template.html" %}
 	{% block content %}
-	<h2>Playlists Combined</h2>
-	<p>
-		There is a new playlist in your spotify account that is similar to {{ playlist_name_1 }} and  {{ playlist_name_2 }}. 
-	</p>
-	<a href = "http://www.spotify.com">Go to Spotify</a>
+	<div class="w3-center">
+		<h2>Playlists Combined</h2>
+		<p>
+			There is a new playlist in your spotify account that is similar to {{ playlist_name_1 }} and  {{ playlist_name_2 }}. 
+		</p>
+		<button type="submit" onclick="window.location.href='http://www.spotify.com'" class = "w3-btn w3-round-xxlarge w3-ripple spotify-button" >Go To Spotify</button>
+		
+	</div>
+	<style>
+	.spotify-button{background-color: #2FD566;}
+	</style>
 	{% endblock %}
 </body>
 </html> 

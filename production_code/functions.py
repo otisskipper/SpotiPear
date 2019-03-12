@@ -1,5 +1,8 @@
 # HUGE shoutout to Simon Quick who's Spotify project was immensely helpful in using Flask to interact with the Spotify API
 # Most of these functions are taken line for line from his project - if it had been a library I would just used import SimonsLibrary
+# Check it out here: https://github.com/siquick/mostplayed
+
+
 import time
 import requests
 from flask import request
@@ -35,18 +38,11 @@ def create_playlist(access_token, user_id, title):
     cp_url = 'https://api.spotify.com/v1/users/' + user_id.decode("utf-8") + '/playlists'
     r_cp = requests.post(cp_url, headers=cp_headers, data=json.dumps(cp_post))
 
-    print (r_cp.status_code)
-
-    if str(r_cp.status_code) != '201':
-        print (r_cp.json())
-
-        return "It didnt work yo - try again"
     r_cp_json = r_cp.json()
     playlist_id = r_cp_json['id']
-    owner_id = r_cp_json['owner']['id']
-    #full_pl = base64.b64encode(owner_id + '/' + playlist_id)
-    # for delay testing purposes
-    return playlist_id #full_pl
+    
+    
+    return playlist_id 
 
 
 def get_all_playlists(access_token, user_id):
