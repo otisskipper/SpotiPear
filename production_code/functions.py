@@ -9,7 +9,7 @@ from flask import request
 import json
 
 def get_access_token(code, authorization):
-    print ('Getting the access token')
+    
     post_url = 'https://accounts.spotify.com/api/token'
     grant_type = 'authorization_code'
     # callback_url = 'http://127.0.0.1:5000/callback'
@@ -17,14 +17,17 @@ def get_access_token(code, authorization):
     #authorization = config.authorization
 
     post = {'redirect_uri': callback_url, 'code': code, 'grant_type': grant_type}
+    
     headers = {'Authorization': authorization, 'Accept': 'application/json',
                'Content-Type': 'application/x-www-form-urlencoded'}
 
+
     r = requests.post(post_url, headers=headers, data=post)
+    print(r.json())
     auth_json = json.loads(r.text)
     try:
         access_token = 'Bearer ' + auth_json['access_token']
-        print (access_token)
+        #print (access_token)
         return access_token
     except Exception as e:
         print ("Something went wrong at the Spotify end - press back and try again")
@@ -58,6 +61,6 @@ def get_all_playlist_names(all_playlists_json):
     all_playlist_names = []
     for playlist in all_playlists_json['items']:
         all_playlist_names.append(playlist['name'])
-        print(playlist['name'])
+        #print(playlist['name'])
     return all_playlist_names
 

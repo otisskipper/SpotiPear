@@ -1,49 +1,55 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8">
-  <title>Flask Parent Template</title>
-  <link rel="stylesheet" href="{{ url_for('static',    filename='css/template.css') }}">
-</head>
-<body id= "grad1">
-  <header>
-    <div class="container">
-      <h1 class="title">SpotiPear (working title)</h1>
-      <strong><nav>
-        <ul class="menu">
-          <!-- <li><a href="{{ url_for('home') }}">Home</a></li> -->
-          
-        </ul>
-      </nav></strong>
-    </div>
-  </header>
-  {% block content %}
-  {% endblock %}
-</body>
+<html>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+
 <style>
-body{
-  text-align: center;
+
+body, html {height: 100%}
+body,h1 {font-family: "Raleway", sans-serif}
+
+.bgimg {
+  background-image: url('../static/background.jpg');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
 }
 
-html {
-  height: 100%;
-  background-image: linear-gradient(-20deg, #560067, #F3CBFA); /* Standard syntax (must be last) */
-  background-size: cover;
-  background-repeat: no-repeat;
-  font-family: "Comic Sans MS", cursive, sans-serif;
-}
-.button {
-  background-color: #000000; 
-  border: none;
-  color: white;
-  padding: 1% 2%;
-  text-align: center;
+/*Get rid of underline on link*/
+a:link {
   text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  font-family: "Comic Sans MS", cursive, sans-serif;
-  border-radius: 5px;
 }
+
+
 </style>
-</style>
+
+
+<body >
+
+
+<div class="bgimg w3-animate-opacity w3-text-white">
+  
+  <div class = "w3-display-top w3-center w3-padding w3-text-black" >
+      <h1 class = "w3-jumbo"> SpotiPear </h1>
+      <hr class="w3-border-black" style="margin:auto;width:100%">
+      <p> Take Two Playlists and Make a New One That Combines the Musical Features of Each</p>
+      <hr class="w3-border-black" style="margin:auto;width:100%">
+  </div>
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+  <div class="w3-display-bottomleft w3-padding-large">
+    Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
+  </div>
+</div>
+
+</body>
 </html>
