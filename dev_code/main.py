@@ -28,6 +28,7 @@ def about():
 @app.route("/logged_in")
 def logged_in():
     code = request.args.get('code')
+    
     access_token = get_access_token(code, app.config['AUTHORIZATION'])
     
     
@@ -37,15 +38,21 @@ def logged_in():
 
     r_me = requests.get('https://api.spotify.com/v1/me', headers=me_headers)
     r_me_json = json.loads(r_me.text)
-    user_id_byte = r_me_json['id'].encode('utf-8')
-    user_id_str = r_me_json['id']
     
-    all_playlists_json = get_all_playlists(access_token, user_id_byte)
-    all_playlists_names = get_all_playlist_names(all_playlists_json)
+    # For some reason we can't do 2 identical post requests in teh get_access_token function
+    # Just catch it down here, if anything goes wrong just push back to home page
+    try: 
+        user_id_byte = r_me_json['id'].encode('utf-8')
+        user_id_str = r_me_json['id']
+        
+        all_playlists_json = get_all_playlists(access_token, user_id_byte)
+        all_playlists_names = get_all_playlist_names(all_playlists_json)
 
-    # Pass access_token and user_id to be used on next page
-    return render_template('logged_in.html', all_playlists_names = all_playlists_names, access_token = access_token, user_id = user_id_str)
-    
+        # Pass access_token and user_id to be used on next page
+        
+        return render_template('logged_in.html', all_playlists_names = all_playlists_names, access_token = access_token, user_id = user_id_str)
+    except Exception as e:
+        return render_template('home.html')
 
 @app.route("/login")
 def login():
@@ -62,9 +69,9 @@ def pearing():
     user_id = request.form['user_id']
     access_token = request.form['access_token']
     
-    import time
-    #Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id)
-    time.sleep(5)
+    #import time
+    Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id)
+    #time.sleep(5)
     return render_template('pearing.html', playlist_name_1 = playlist_name_1, playlist_name_2 = playlist_name_2, user_id = user_id, access_token = access_token)
 
 
