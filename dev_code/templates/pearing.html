@@ -8,12 +8,26 @@
 		<p>
 			There is a new playlist in your spotify account that is similar to {{ playlist_name_1 }} and  {{ playlist_name_2 }}. 
 		</p>
-		<button type="submit" onclick="window.location.href='http://www.spotify.com'" class = "w3-btn w3-round-xxlarge w3-ripple spotify-button" >Go To Spotify</button>
-		
+		<button type="submit" class = "w3-btn w3-round-xxlarge w3-ripple spotify-button" onclick="window.open('http://open.spotify.com/playlist/{{playlist_id}}')" >Go To Spotify</button>
+
+		<button type="submit" onclick="window.location.href='/'" class = "w3-btn w3-round-xxlarge w3-ripple home-button" >Do It Again</button>
 	</div>
 	<style>
 	.spotify-button{background-color: #2FD566;}
+	.home-button{background-color: #08205F;}
+	
 	</style>
-	{% endblock %}
+	<script>
+		var playlist_id = {{playlist_id}}
+	</script>
+<!-- 
+	<script>
+		var all_playlists_names = {{all_playlists_names|safe}};
+		var user_id = '{{user_id}}';
+		var access_token = '{{access_token}}';
+	</script>
+
+ -->
+ 	{% endblock %}
 </body>
 </html> 
