@@ -70,6 +70,8 @@ def Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id):
     
     sp.user_playlist_add_tracks(user_id, playlist_id, track_ids_to_add)
 
+    return playlist_id
+
 
 
 
