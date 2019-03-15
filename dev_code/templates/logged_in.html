@@ -30,10 +30,14 @@
         <form action ="{{ url_for('pearing') }}" method="POST">
           
             <select id="playlist_dropdown_1" name = "playlist_name_1" class = "custom-select"></select>
-            <p></p>
+            
             <select id="playlist_dropdown_2" name = "playlist_name_2" class = "custom-select"></select>
             <p></p>
+            
+            <input name="new_playlist_name" class="w3-input w3-border" type="text" placeholder="New Playlist Name" style="margin:auto;width:50%;text-align:center;">
+            <p></p>
             <!-- include user_id and access_token in post request so Python can leverage for functions -->
+            
             <input type="hidden" name="user_id" id = "user_id"></input>
             <input type="hidden" name="access_token" id = "access_token"></input>
             <input type="hidden" name="user_id" id = "all_playlist_names"></input>
@@ -96,7 +100,11 @@ div#loading {
     }
 
 .combine-playlists{
-  background-color: #C94874;
+  background-color: #522D69;
+}
+.custom-select{
+    /*padding: 30px;*/
+    margin: 2%;
 }
 
 </style>

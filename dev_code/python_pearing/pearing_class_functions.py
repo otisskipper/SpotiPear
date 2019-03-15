@@ -11,7 +11,7 @@ import requests
 import json
 
 
-def Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id):
+def Pear_Playlists(playlist_name_1, playlist_name_2, new_playlist_name, access_token, user_id):
     ### INITIALIZE THINGS
     p1_base = Playlist_Base(playlist_name = playlist_name_1, user_id = user_id, access_token = access_token)
     p2_base = Playlist_Base(playlist_name = playlist_name_2, user_id = user_id, access_token = access_token)
@@ -62,7 +62,7 @@ def Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id):
     sp = spotipy.Spotify(auth=access_token[7:])
 
     # Spotipy doesn't return the playlist_id so use custom function (thanks Simon Quick)
-    playlist_id = create_playlist(access_token, user_id.encode(), "SpotiPear_Playlist")
+    playlist_id = create_playlist(access_token, user_id.encode(), new_playlist_name)
     #sp.user_playlist_create(user_id, "SpotiPear_Playlist", public = True)
     
     # Now let's add some tracks

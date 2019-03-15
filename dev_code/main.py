@@ -40,7 +40,7 @@ def logged_in():
     r_me_json = json.loads(r_me.text)
     
     # For some reason we can't do 2 identical post requests in teh get_access_token function
-    # Just catch it down here, if anything goes wrong just push back to home page
+    # Just catch it down here, if they hit refresh just do login steps
     try: 
         user_id_byte = r_me_json['id'].encode('utf-8')
         user_id_str = r_me_json['id']
@@ -52,7 +52,10 @@ def logged_in():
         
         return render_template('logged_in.html', all_playlists_names = all_playlists_names, access_token = access_token, user_id = user_id_str)
     except Exception as e:
-        return render_template('home.html')
+            callback_url = request.url_root + 'logged_in'
+            base_url = 'https://accounts.spotify.com/en/authorize?client_id=' + app.config['CLIENT_ID'] + '&response_type=code&redirect_uri=' + callback_url + '&scope=user-read-email%20playlist-read-private%20user-follow-read%20user-library-read%20user-top-read%20playlist-modify-private%20playlist-modify-public&state=34fFs29kd09'
+            response = make_response(redirect(base_url, 302))
+            return response
 
 @app.route("/login")
 def login():
@@ -66,11 +69,12 @@ def pearing():
     
     playlist_name_1 = request.form['playlist_name_1']
     playlist_name_2 = request.form['playlist_name_2']
+    new_playlist_name = request.form['new_playlist_name']
     user_id = request.form['user_id']
     access_token = request.form['access_token']
     
     #import time
-    playlist_id = Pear_Playlists(playlist_name_1, playlist_name_2, access_token, user_id)
+    playlist_id = Pear_Playlists(playlist_name_1, playlist_name_2, new_playlist_name, access_token, user_id)
     #time.sleep(5)
     print(playlist_id)
     return render_template('pearing.html', playlist_name_1 = playlist_name_1, playlist_name_2 = playlist_name_2, user_id = user_id, access_token = access_token, playlist_id = playlist_id)

@@ -18,6 +18,7 @@ body,h1 {font-family: "Raleway", sans-serif}
   min-height: 100%;
   background-position: center;
   background-size: cover;
+
 }
 
 /*Get rid of underline on link*/
@@ -34,17 +35,33 @@ a:link {
   margin-top: 10%;
 }
 
+.footer {
+   bottom:0;
+   position:relative;
+   
+   width:100%;
+}
+
+#con {
+   min-height:100%;
+   position:relative;
+}
 
 </style>
 
 
 <body >
 
-
-<div class="bgimg w3-animate-opacity w3-text-white">
+<div id = "con" class = "bgimg"> 
+<div class=" w3-animate-opacity w3-text-white">
   
   <div class = "w3-display-top w3-center w3-padding w3-text-black" >
-      <h1 class = "w3-jumbo"> SpotiPear </h1>
+      <!-- <h1 class = "w3-jumbo"> SpotiPear </h1> -->
+      <h1 class = "w3-jumbo">
+        <a href="/">
+          SpotiPear
+        </a>
+      </h1>
       <hr class="w3-border-black" style="margin:auto;width:100%">
       <p> Take Two Playlists and Make a New One That Combines the Musical Features of Each</p>
       <hr class="w3-border-black" style="margin:auto;width:100%">
@@ -55,12 +72,11 @@ a:link {
 {% block content %}
 {% endblock %}
 
-</div>
 
-  <div class="w3-display-bottomleft w3-padding-large">
-    Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
-  </div>
-</div>
 
+ 
+</div>
+</div>
+</div>
 </body>
 </html>
