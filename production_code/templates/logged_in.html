@@ -19,7 +19,7 @@
 
 
 <body>
-    <div class="w3-display-middle w3-center">
+    <div class="w3-center center_box">
       <div>
         <h2>Choose Playlists</h2>
         <p> If you want to combine yours and a friend's you'll have to follow their playlist from your account</p>
@@ -34,7 +34,7 @@
             <select id="playlist_dropdown_2" name = "playlist_name_2" class = "custom-select"></select>
             <p></p>
             
-            <input name="new_playlist_name" class="w3-input w3-border" type="text" placeholder="New Playlist Name" style="margin:auto;width:50%;text-align:center;">
+            <input name="new_playlist_name" class="w3-input w3-border" type="text"  placeholder="New Playlist Name" style="margin:auto;width:60%;text-align:center;">
             <p></p>
             <!-- include user_id and access_token in post request so Python can leverage for functions -->
             
@@ -88,6 +88,7 @@ document.getElementById('user_id').value = user_id;
 document.getElementById('access_token').value = access_token;
 
 
+
 </script>
 
 <style>
@@ -105,7 +106,10 @@ div#loading {
 .custom-select{
     /*padding: 30px;*/
     margin: 2%;
+    width: 70%;
 }
+
+
 
 </style>
 
